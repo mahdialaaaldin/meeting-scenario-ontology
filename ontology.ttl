@@ -1,0 +1,58 @@
+@prefix : <http://example.org/meeting-ontology#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:Person a rdfs:Class .
+:Organization a rdfs:Class .
+:ElectronicAgenda a rdfs:Class .
+:Meeting a rdfs:Class .
+:Project a rdfs:Class .
+:Profile a rdfs:Class .
+
+:worksFor a rdf:Property ;
+    rdfs:domain :Person ;
+    rdfs:range :Organization .
+
+:manages a rdf:Property ;
+    rdfs:domain :ElectronicAgenda ;
+    rdfs:range :Meeting .
+
+:hasProfile a rdf:Property ;
+    rdfs:domain :Meeting ;
+    rdfs:range :Profile .
+
+:involvedIn a rdf:Property ;
+    rdfs:domain :Person ;
+    rdfs:range :Project .
+
+:hasDate a rdf:Property ;
+    rdfs:domain :Profile ;
+    rdfs:range xsd:date .
+
+:hasHour a rdf:Property ;
+    rdfs:domain :Profile ;
+    rdfs:range xsd:time .
+
+:hasPlace a rdf:Property ;
+    rdfs:domain :Profile ;
+    rdfs:range xsd:string .
+
+:JohnPappas a :Person ;
+    :worksFor :ConstructionCompany ;
+    :involvedIn :ProjectX .
+
+:ConstructionCompany a :Organization .
+
+:Agenda a :ElectronicAgenda ;
+    :manages :ProjectXMeeting .
+
+:ProjectX a :Project .
+
+:ProjectXMeeting a :Meeting ;
+    :hasProfile :ProjectXMeetingProfile .
+
+:ProjectXMeetingProfile a :Profile ;
+    :hasDate "2023-10-15"^^xsd:date ;
+    :hasHour "10:00"^^xsd:time ;
+    :hasPlace "Paris"^^xsd:string .
