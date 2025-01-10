@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SPARQL Query Interface</title>
+  <script src="https://cdn.jsdelivr.net/npm/@comunica/actor-init-sparql@2.0.0/lib/index.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    textarea {
+      width: 100%;
+      height: 150px;
+      font-family: monospace;
+    }
+    pre {
+      background: #f4f4f4;
+      padding: 10px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>SPARQL Query Interface</h1>
+  <p>Enter your SPARQL query below and click "Run Query" to see the results.</p>
+  <textarea id="query" placeholder="Enter your SPARQL query here...">
+PREFIX : <http://example.org/meeting-ontology#>
+
+SELECT ?meeting
+WHERE {
+  ?agenda :manages ?meeting .
+}
+  </textarea>
+  <br><br>
+  <button onclick="runQuery()">Run Query</button>
+  <h2>Results</h2>
+  <pre id="results"></pre>
+
+  <script>
+    async function runQuery() {
+      const query = document.getElementById('query').value;
+      const resultsElement = document.getElementById('results');
+
+      // Load your TTL file
+      const engine = new ComunicaEngine('https://mahdialaaaldin.github.io/meeting-scenario-ontology/ontology.ttl');
+
+      // Run the SPARQL query
+      const result = await engine.query(query, { sources: ['https://mahdialaaaldin.github.io/meeting-scenario-ontology/ontology.ttl'] });
+
+      // Display the results
+      const bindings = await result.bindings();
+      resultsElement.textContent = JSON.stringify(bindings, null, 2);
+    }
+  </script>
+</body>
+</html>
