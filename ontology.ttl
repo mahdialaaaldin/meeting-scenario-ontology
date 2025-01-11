@@ -1,58 +1,206 @@
-@prefix : <http://example.org/meeting-ontology#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix ex: <http://example.org/> .
 
-:Person a rdfs:Class .
-:Organization a rdfs:Class .
-:ElectronicAgenda a rdfs:Class .
-:Meeting a rdfs:Class .
-:Project a rdfs:Class .
-:Profile a rdfs:Class .
+# Classes
+ex:Entity a owl:Class .
+ex:Resource a owl:Class ;
+    rdfs:subClassOf ex:Entity .
+ex:ManagedEntity a owl:Class ;
+    rdfs:subClassOf ex:Resource .
+ex:Asset a owl:Class ;
+    rdfs:subClassOf ex:ManagedEntity .
+ex:Project a owl:Class ;
+    rdfs:subClassOf ex:ManagedEntity .
+ex:ElectronicAgenda a owl:Class ;
+    rdfs:subClassOf ex:Asset .
+ex:Agent a owl:Class ;
+    rdfs:subClassOf ex:Entity .
+ex:Group a owl:Class ;
+    rdfs:subClassOf ex:Agent .
+ex:Organism a owl:Class ;
+    rdfs:subClassOf ex:Group .
+ex:CommercialAgent a owl:Class ;
+    rdfs:subClassOf ex:Group .
+ex:Organization a owl:Class ;
+    rdfs:subClassOf ex:Group .
+ex:Human a owl:Class ;
+    rdfs:subClassOf ex:Agent .
+ex:Business a owl:Class ;
+    rdfs:subClassOf ex:Organization .
+ex:Company a owl:Class ;
+    rdfs:subClassOf ex:Business .
+ex:ConstructionCompany a owl:Class ;
+    rdfs:subClassOf ex:Company .
+ex:Location a owl:Class ;
+    rdfs:subClassOf ex:Entity .
+ex:Region a owl:Class ;
+    rdfs:subClassOf ex:Location .
+ex:GeographicalArea a owl:Class ;
+    rdfs:subClassOf ex:Region .
+ex:GeopoliticalArea a owl:Class ;
+    rdfs:subClassOf ex:GeographicalArea .
+ex:City a owl:Class ;
+    rdfs:subClassOf ex:GeopoliticalArea .
+ex:ContextInformation a owl:Class ;
+    rdfs:subClassOf ex:Entity .
+ex:Activity a owl:Class ;
+    rdfs:subClassOf ex:ContextInformation .
+ex:Process a owl:Class ;
+    rdfs:subClassOf ex:Activity .
+ex:ScheduledActivity a owl:Class ;
+    rdfs:subClassOf ex:Activity .
+ex:Action a owl:Class ;
+    rdfs:subClassOf ex:ScheduledActivity .
+ex:Meeting a owl:Class ;
+    rdfs:subClassOf ex:Action .
+ex:FormalMeeting a owl:Class ;
+    rdfs:subClassOf ex:Meeting .
+ex:Profile a owl:Class ;
+    rdfs:subClassOf ex:ContextInformation .
+ex:ActivityProfile a owl:Class ;
+    rdfs:subClassOf ex:Profile .
+ex:MeetingProfile a owl:Class ;
+    rdfs:subClassOf ex:ActivityProfile .
+ex:FormalMeetingProfile a owl:Class ;
+    rdfs:subClassOf ex:MeetingProfile .
 
-:worksFor a rdf:Property ;
-    rdfs:domain :Person ;
-    rdfs:range :Organization .
-
-:manages a rdf:Property ;
-    rdfs:domain :ElectronicAgenda ;
-    rdfs:range :Meeting .
-
-:hasProfile a rdf:Property ;
-    rdfs:domain :Meeting ;
-    rdfs:range :Profile .
-
-:involvedIn a rdf:Property ;
-    rdfs:domain :Person ;
-    rdfs:range :Project .
-
-:hasDate a rdf:Property ;
-    rdfs:domain :Profile ;
+# Object Properties
+ex:isAffectedBy a owl:ObjectProperty ;
+    rdfs:domain ex:Entity ;
+    rdfs:range ex:ContextInformation .
+ex:isInstanceOf a owl:ObjectProperty ;
+    rdfs:domain ex:Entity ;
+    rdfs:range ex:Entity .
+ex:hasProject a owl:ObjectProperty ;
+    rdfs:domain ex:Human ;
+    rdfs:range ex:Project .
+ex:isExecutiveOf a owl:ObjectProperty ;
+    rdfs:domain ex:Human ;
+    rdfs:range ex:ConstructionCompany .
+ex:belongsTo a owl:ObjectProperty ;
+    rdfs:domain ex:ConstructionCompany ;
+    rdfs:range ex:City .
+ex:hasLocation a owl:ObjectProperty ;
+    rdfs:domain ex:Entity ;
+    rdfs:range ex:Location .
+ex:hasAgenda a owl:ObjectProperty ;
+    rdfs:domain ex:Human ;
+    rdfs:range ex:ElectronicAgenda .
+ex:hasEventProfile a owl:ObjectProperty ;
+    rdfs:domain ex:ElectronicAgenda ;
+    rdfs:range ex:MeetingProfile .
+ex:hasMeeting a owl:ObjectProperty ;
+    rdfs:domain ex:ElectronicAgenda ;
+    rdfs:range ex:FormalMeeting .
+ex:hasProfile a owl:ObjectProperty ;
+    rdfs:domain ex:FormalMeeting ;
+    rdfs:range ex:FormalMeetingProfile .
+ex:hasDate a owl:ObjectProperty ;
+    rdfs:domain ex:FormalMeetingProfile ;
     rdfs:range xsd:date .
-
-:hasHour a rdf:Property ;
-    rdfs:domain :Profile ;
+ex:hasHour a owl:ObjectProperty ;
+    rdfs:domain ex:FormalMeetingProfile ;
     rdfs:range xsd:time .
+ex:hasPlace a owl:ObjectProperty ;
+    rdfs:domain ex:FormalMeetingProfile ;
+    rdfs:range xsd:string .
+ex:isRelatedTo a owl:ObjectProperty ;
+    rdfs:domain ex:FormalMeeting ;
+    rdfs:range ex:Project .
 
-:hasPlace a rdf:Property ;
-    rdfs:domain :Profile ;
+# Data Properties
+ex:hasName a owl:DatatypeProperty ;
+    rdfs:domain ex:Entity ;
     rdfs:range xsd:string .
 
-:JohnPappas a :Person ;
-    :worksFor :ConstructionCompany ;
-    :involvedIn :ProjectX .
+# Instances
+ex:JohnPappas a ex:Human ;
+    ex:hasName "John Pappas" ;
+    ex:isExecutiveOf ex:ConstCompX ;
+    ex:hasAgenda ex:ElectAgendaX .
+ex:ConstCompX a ex:ConstructionCompany ;
+    ex:hasName "Construction Company" ;
+    ex:belongsTo ex:Athens .
+ex:Athens a ex:City ;
+    ex:hasName "Athens" .
+ex:Paris a ex:City ;
+    ex:hasName "Paris" .
+ex:ProjectX a ex:Project ;
+    ex:hasName "ProjectX" .
+ex:ElectAgendaX a ex:ElectronicAgenda ;
+    ex:hasEventProfile ex:ProjectXMeetingProfile ;
+    ex:hasMeeting ex:ProjectXMeeting .
+ex:ProjectXMeeting a ex:FormalMeeting ;
+    ex:hasProfile ex:ProjectXMeetingProfile ;
+    ex:isRelatedTo ex:ProjectX .
+ex:ProjectXMeetingProfile a ex:FormalMeetingProfile ;
+    ex:hasDate "2016-06-06"^^xsd:date ;
+    ex:hasHour "10:00:00"^^xsd:time ;
+    ex:hasPlace "Meeting place" .
 
-:ConstructionCompany a :Organization .
+# General Class Axioms
+ex:FormalMeeting rdfs:subClassOf [
+    a owl:Restriction ;
+    owl:onProperty ex:hasProfile ;
+    owl:someValuesFrom ex:FormalMeetingProfile
+] .
 
-:Agenda a :ElectronicAgenda ;
-    :manages :ProjectXMeeting .
+ex:ElectronicAgenda rdfs:subClassOf [
+    a owl:Restriction ;
+    owl:onProperty ex:hasEventProfile ;
+    owl:someValuesFrom ex:MeetingProfile
+] .
 
-:ProjectX a :Project .
+# Equivalent Classes
+ex:FormalMeeting owl:equivalentClass [
+    a owl:Class ;
+    owl:intersectionOf (
+        ex:Meeting
+        [ a owl:Restriction ;
+          owl:onProperty ex:hasProfile ;
+          owl:allValuesFrom ex:FormalMeetingProfile
+        ]
+    )
+] .
 
-:ProjectXMeeting a :Meeting ;
-    :hasProfile :ProjectXMeetingProfile .
+# Disjoint Classes
+ex:Asset owl:disjointWith ex:Agent .
+ex:ManagedEntity owl:disjointWith ex:Group .
+ex:Human owl:disjointWith ex:Organization .
 
-:ProjectXMeetingProfile a :Profile ;
-    :hasDate "2023-10-15"^^xsd:date ;
-    :hasHour "10:00"^^xsd:time ;
-    :hasPlace "Paris"^^xsd:string .
+# Property Characteristics
+ex:isInstanceOf a owl:FunctionalProperty .
+ex:hasAgenda a owl:FunctionalProperty .
+ex:hasEventProfile a owl:FunctionalProperty .
+ex:hasProfile a owl:FunctionalProperty .
+ex:hasDate a owl:FunctionalProperty .
+ex:hasHour a owl:FunctionalProperty .
+ex:hasPlace a owl:FunctionalProperty .
+ex:isRelatedTo a owl:FunctionalProperty .
+
+ex:isAffectedBy a owl:TransitiveProperty .
+
+ex:isInstanceOf a owl:InverseFunctionalProperty .
+
+ex:isAffectedBy a owl:SymmetricProperty .
+
+ex:hasAgenda a owl:AsymmetricProperty .
+ex:hasEventProfile a owl:AsymmetricProperty .
+ex:hasProfile a owl:AsymmetricProperty .
+ex:hasDate a owl:AsymmetricProperty .
+ex:hasHour a owl:AsymmetricProperty .
+ex:hasPlace a owl:AsymmetricProperty .
+ex:isRelatedTo a owl:AsymmetricProperty .
+
+ex:isInstanceOf a owl:ReflexiveProperty .
+
+ex:hasAgenda a owl:IrreflexiveProperty .
+ex:hasEventProfile a owl:IrreflexiveProperty .
+ex:hasProfile a owl:IrreflexiveProperty .
+ex:hasDate a owl:IrreflexiveProperty .
+ex:hasHour a owl:IrreflexiveProperty .
+ex:hasPlace a owl:IrreflexiveProperty .
+ex:isRelatedTo a owl:IrreflexiveProperty .
