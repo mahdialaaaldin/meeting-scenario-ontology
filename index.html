@@ -77,13 +77,6 @@
       word-wrap: break-word;
       font-size: 14px;
     }
-    .xml-container {
-      margin-top: 20px;
-      display: none;
-    }
-    .xml-container.visible {
-      display: block;
-    }
   </style>
   <script src="https://unpkg.com/rdflib@next/dist/rdflib.min.js"></script>
 </head>
@@ -92,22 +85,17 @@
     <h1>SPARQL Query Interface</h1>
     <p>Enter your SPARQL query below and click "Run Query" to see the results.</p>
     <textarea id="query" placeholder="Enter your SPARQL query here...">
-PREFIX : <http://example.org/meeting-ontology#>
-SELECT ?meeting
+PREFIX ex: <http://example.org/>
+SELECT ?human
 WHERE {
-  ?agenda :manages ?meeting .
+  ?human a ex:Human .
 }
     </textarea>
     <div class="button-group">
       <button onclick="runQuery()">Run Query</button>
-    <button id="toggleButton" onclick="toggleOntology()">Show Ontology XML</button>
     </div>
     <h2>Results</h2>
     <pre id="results"></pre>
-    <div class="xml-container" id="xml-container">
-      <h2>Ontology XML</h2>
-      <pre id="ontology-xml"></pre>
-    </div>
   </div>
   <script>
     let store;
@@ -163,23 +151,6 @@ WHERE {
         }, {});
       });
       resultsElement.textContent = JSON.stringify(formattedResults, null, 2);
-    }
-
-    function toggleOntology() {
-      const xmlContainer = document.getElementById('xml-container');
-      const ontologyXmlElement = document.getElementById('ontology-xml');
-      const toggleButton = document.getElementById('toggleButton');
-
-      if (xmlContainer.style.display === 'none') {
-        xmlContainer.style.display = 'block';
-        ontologyXmlElement.textContent = ontologyData;
-        toggleButton.textContent = 'Hide Ontology XML';
-        toggleButton.style.backgroundColor = '#dc3545'; // Change to red
-      } else {
-        xmlContainer.style.display = 'none';
-        toggleButton.textContent = 'Show Ontology XML';
-        toggleButton.style.backgroundColor = '#007bff'; // Change back to blue
-      }
     }
 
     // Fetch data when the page loads
