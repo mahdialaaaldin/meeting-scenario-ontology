@@ -7,33 +7,30 @@ To run SPARQL queries on the ontology, visit the following URL:
 [https://mahdialaaaldin.github.io/meeting-scenario-ontology/](https://mahdialaaaldin.github.io/meeting-scenario-ontology/)
 
 ### Example Queries
-### Query 1: Get all people working for a specific organization
+
+#### Query 1: Retrieve all instances of `ex:Human`
 ```sparql
-PREFIX : <http://example.org/meeting-ontology#>
-SELECT ?person
+PREFIX ex: <http://example.org/>
+SELECT ?human
 WHERE {
-  ?person :worksFor :ConstructionCompany .
+  ?human a ex:Human .
 }
 ```
 
-### Query 2: Get all projects a specific person is involved in
+#### Query 2: Retrieve the name of John Pappas
 ```sparql
-PREFIX : <http://example.org/meeting-ontology#>
-SELECT ?project
+PREFIX ex: <http://example.org/>
+SELECT ?name
 WHERE {
-  :JohnPappas :involvedIn ?project .
+  ex:JohnPappas ex:hasName ?name .
 }
 ```
 
-### Query 3: Get all meetings and their associated profiles
+#### Query 3: Retrieve the company John Pappas is an executive of
 ```sparql
-PREFIX : <http://example.org/meeting-ontology#>
-SELECT ?meeting ?date ?hour ?place
+PREFIX ex: <http://example.org/>
+SELECT ?company
 WHERE {
-  ?meeting :hasProfile ?profile .
-  ?profile :hasDate ?date .
-  ?profile :hasHour ?hour .
-  ?profile :hasPlace ?place .
+  ex\:JohnPappas ex\:isExecutiveOf ?company .
 }
 ```
-
