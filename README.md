@@ -31,6 +31,6 @@ WHERE {
 PREFIX ex: <http://example.org/>
 SELECT ?company
 WHERE {
-  ex\:JohnPappas ex\:isExecutiveOf ?company .
+  ex:JohnPappas ex:isExecutiveOf ?company .
 }
 ```
